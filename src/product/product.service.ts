@@ -162,4 +162,14 @@ export class ProductService {
 
         throw new InternalServerErrorException('Something has very wrong');
     }
+
+    async deleteAllProduct() {
+        const query = this.productRepository.createQueryBuilder('product');
+
+        try {
+            return await query.delete().where({}).execute();
+        } catch (error) {
+            this.handleDBErrors(error);
+        }
+    }
 }
