@@ -15,14 +15,14 @@
 docker-compose up
 ```
 
-6. Ejecutar el Seed
-
-```
-http://localhost:3000/api/seed
-```
-
-7. Levantar el pryecto:
+6. Levantar el pryecto:
 
 ```
 npm run dev
+```
+
+7. Ejecutar el Seed
+
+```
+http://localhost:3000/api/seed
 ```
