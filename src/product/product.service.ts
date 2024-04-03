@@ -13,6 +13,7 @@ import { ProductImage } from './entities/product-image.entity';
 import { DataSource, Repository } from 'typeorm';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { validate as isUUID } from 'uuid';
+import { User } from 'src/auth/entities/auth.entity';
 
 @Injectable()
 export class ProductService {
@@ -28,7 +29,7 @@ export class ProductService {
         private readonly dataSource: DataSource,
     ) {}
 
-    async create(createProductDto: CreateProductDto) {
+    async create(createProductDto: CreateProductDto, user: User) {
         try {
             //? CREA LA INSTANCIA PERO NO LA GUARDA EN LA BASE DE DATOS
 
@@ -36,6 +37,7 @@ export class ProductService {
 
             const product = this.productRepository.create({
                 ...productDetails,
+                user,
                 images: images.map((image) =>
                     this.productImageRepository.create({ url: image }),
                 ),
@@ -103,7 +105,7 @@ export class ProductService {
         }
     }
 
-    async update(id: string, updateProductDto: UpdateProductDto) {
+    async update(id: string, updateProductDto: UpdateProductDto, user: User) {
         const { images, ...toUpdate } = updateProductDto;
 
         const product = await this.productRepository.preload({
@@ -131,6 +133,7 @@ export class ProductService {
                 );
             }
 
+            product.user = user;
             await queryRunner.manager.save(product);
 
             // await this.productRepository.save(product);
